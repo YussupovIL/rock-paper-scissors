@@ -1,0 +1,48 @@
+<HTML>
+<head>
+    <title>ROCK PAPER SCISSORS APP!</title>
+</head>
+<body>
+Which one will it be?<br/><br/>
+<a href="#" onclick="playRoshambo('rock')"> rock </a> &nbsp; &nbsp;
+<a href="#" onclick="playRoshambo('paper')"> paper </a> &nbsp; &nbsp;
+<a href="#" onclick="playRoshambo('scissors')"> scissors </a> &nbsp; &nbsp;
+
+<hr/><br/>
+
+<i> <div id="results"> </div> </i>
+<br/>
+<span id="wins"></span> <span id="losses"></span> <span id="ties"></span>
+</body>
+
+<script>
+    playRoshambo = async function(clientGesture) {
+        let url;
+        let result;
+
+        if(clientGesture == 'rock'){
+            result = "tie";
+            url = "http://localhost:8080/score/ties";
+        } else if(clientGesture == 'paper'){
+            result = "win";
+            url = "http://localhost:8080/score/wins";
+        } else if(clientGesture == 'scissors'){
+            result = "loss";
+            url = "http://localhost:8080/score/losses";
+        }
+
+        try{
+            const response = await fetch(url, {method: "POST"});
+            const theScore = await response.json();
+            document.getElementById('wins').innerHTML = "<b>Wins: </b> " + theScore.wins;
+            document.getElementById('losses').innerHTML = "<b>Losses: </b> " + theScore.losses;
+            document.getElementById('ties').innerHTML = "<b>Ties: </b> " + theScore.ties;
+
+            document.getElementById('results').innerHTML = "The result was a: " + result;
+
+        } catch(error) {
+            console.log(error.message);
+        }
+    }
+</script>
+</HTML>
